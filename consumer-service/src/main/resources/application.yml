@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: consumer-service
+
+server:
+  port: 7091
+  servlet:
+    context-path: /consumer-service
+
+producer-service:
+  url: http://localhost:7090

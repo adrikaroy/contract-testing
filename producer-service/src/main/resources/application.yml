@@ -1,0 +1,8 @@
+spring:
+  application:
+    name: producer-service
+
+server:
+  port: 7090
+  servlet:
+    context-path: /producer-service

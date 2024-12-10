@@ -1,0 +1,39 @@
+version: '3.8'
+
+x-common-variables: &common-variables
+  DB_USERNAME: ${DB_USERNAME}
+  DB_PASSWORD: ${DB_PASSWORD}
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: pact_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pact_network
+
+  pact-broker:
+    image: pactfoundation/pact-broker
+    container_name: pact-broker
+    environment:
+      PACT_BROKER_DATABASE_URL: postgres://${DB_USERNAME}:${DB_PASSWORD}@postgres:5432/pact_db
+    ports:
+      - "9292:9292"
+    depends_on:
+      - postgres
+    networks:
+      - pact_network
+
+networks:
+  pact_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
